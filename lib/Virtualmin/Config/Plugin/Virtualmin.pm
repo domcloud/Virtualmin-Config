@@ -65,7 +65,7 @@ sub actions {
     elsif (defined $self->bundle()) {
       $virtual_server::config{'ssl'} = 3;
     }
-    $virtual_server::config{'plugins'} = '' # implicitly disable awstats and htpasswd
+    $virtual_server::config{'plugins'} = ''; # implicitly disable awstats and htpasswd
     if (-e "/etc/debian_version" || -e "/etc/lsb-release") {
       $virtual_server::config{'proftpd_config'}
         = 'ServerName ${DOM}	<Anonymous ${HOME}/ftp>	User ftp	Group nogroup	UserAlias anonymous ftp	<Limit WRITE>	DenyAll	</Limit>	RequireValidShell off	</Anonymous>';
