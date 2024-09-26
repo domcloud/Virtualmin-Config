@@ -34,47 +34,49 @@ sub actions {
 
   $self->spin();
   eval {
-    foreign_require("init",    "init-lib.pl");
-    foreign_require("usermin", "usermin-lib.pl");
-    usermin::get_usermin_config(\%uconfig);
-    $uconfig{'theme'}      = "authentic-theme";
-    $uconfig{'gotomodule'} = 'mailbox';
-    $uconfig{'ui_show'}    = 'host time';
-    usermin::put_usermin_config(\%uconfig);
-    usermin::get_usermin_miniserv_config(\%uminiserv);
-    $uminiserv{'preroot'}         = "authentic-theme";
-    $uminiserv{'ssl'}             = "1";
-    $uminiserv{'ssl_cipher_list'} = $webmin::strong_ssl_ciphers;
-    $uminiserv{'domainuser'}      = 1;
-    $uminiserv{'domainstrip'}     = 1;
+    if ($self->bundle() ne "DomCloud") {
+      foreign_require("init",    "init-lib.pl");
+      foreign_require("usermin", "usermin-lib.pl");
+      usermin::get_usermin_config(\%uconfig);
+      $uconfig{'theme'}      = "authentic-theme";
+      $uconfig{'gotomodule'} = 'mailbox';
+      $uconfig{'ui_show'}    = 'host time';
+      usermin::put_usermin_config(\%uconfig);
+      usermin::get_usermin_miniserv_config(\%uminiserv);
+      $uminiserv{'preroot'}         = "authentic-theme";
+      $uminiserv{'ssl'}             = "1";
+      $uminiserv{'ssl_cipher_list'} = $webmin::strong_ssl_ciphers;
+      $uminiserv{'domainuser'}      = 1;
+      $uminiserv{'domainstrip'}     = 1;
 
-    # Enable 2FA
-    $uminiserv{'twofactor_provider'} = 'totp';
-    $uminiserv{'twofactorfile'}
-      ||= "$usermin::config{'usermin_dir'}/twofactor-users";
-    $uminiserv{'twofactor_wrapper'}
-      = "$usermin::config{'usermin_dir'}/twofactor/twofactor.pl";
-    usermin::create_cron_wrapper($uminiserv{'twofactor_wrapper'},
-      "twofactor", "twofactor.pl");
-    my (%uacl, %umdirs);
-    lock_file(usermin::usermin_acl_filename());
-    usermin::read_usermin_acl(\%uacl, \%umdirs);
-    push(@{$umdirs{'user'}}, 'twofactor');
-    usermin::save_usermin_acl("user", $umdirs{'user'});
-    unlock_file(usermin::usermin_acl_filename());
+      # Enable 2FA
+      $uminiserv{'twofactor_provider'} = 'totp';
+      $uminiserv{'twofactorfile'}
+        ||= "$usermin::config{'usermin_dir'}/twofactor-users";
+      $uminiserv{'twofactor_wrapper'}
+        = "$usermin::config{'usermin_dir'}/twofactor/twofactor.pl";
+      usermin::create_cron_wrapper($uminiserv{'twofactor_wrapper'},
+        "twofactor", "twofactor.pl");
+      my (%uacl, %umdirs);
+      lock_file(usermin::usermin_acl_filename());
+      usermin::read_usermin_acl(\%uacl, \%umdirs);
+      push(@{$umdirs{'user'}}, 'twofactor');
+      usermin::save_usermin_acl("user", $umdirs{'user'});
+      unlock_file(usermin::usermin_acl_filename());
 
-    usermin::put_usermin_miniserv_config(\%uminiserv);
+      usermin::put_usermin_miniserv_config(\%uminiserv);
 
-    if (init::status_action("usermin")) {
-      usermin::restart_usermin_miniserv();
+      if (init::status_action("usermin")) {
+        usermin::restart_usermin_miniserv();
+      }
+      else {
+        usermin::start_usermin();
+      }
+
+      # Start Usermin at boot
+      foreign_require("init", "init-lib.pl");
+      init::enable_at_boot("usermin");
     }
-    else {
-      usermin::start_usermin();
-    }
-
-    # Start Usermin at boot
-    foreign_require("init", "init-lib.pl");
-    init::enable_at_boot("usermin");
 
     $self->done(1);    # OK!
   };
