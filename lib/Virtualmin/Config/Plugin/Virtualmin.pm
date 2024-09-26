@@ -65,7 +65,15 @@ sub actions {
     elsif (defined $self->bundle()) {
       $virtual_server::config{'ssl'} = 3;
     }
-    $virtual_server::config{'plugins'} = ''; # implicitly disable awstats and htpasswd
+    if (!defined($virtual_server::config{'plugins'})) {
+      # Enable extra default modules
+      $virtual_server::config{'plugins'} = 'virtualmin-awstats virtualmin-htpasswd';
+    } else if ($self->bundle() ne "DomCloud") {
+      # When defined make sure plugins we consider default are enabled
+      my @plugins = split(/\s/, $virtual_server::config{'plugins'});
+      push(@plugins, 'virtualmin-awstats', 'virtualmin-htpasswd');
+      $virtual_server::config{'plugins'} = join(' ', unique(@plugins));
+    }
     if (-e "/etc/debian_version" || -e "/etc/lsb-release") {
       $virtual_server::config{'proftpd_config'}
         = 'ServerName ${DOM}	<Anonymous ${HOME}/ftp>	User ftp	Group nogroup	UserAlias anonymous ftp	<Limit WRITE>	DenyAll	</Limit>	RequireValidShell off	</Anonymous>';
