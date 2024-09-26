@@ -68,7 +68,7 @@ sub actions {
     if (!defined($virtual_server::config{'plugins'})) {
       # Enable extra default modules
       $virtual_server::config{'plugins'} = 'virtualmin-awstats virtualmin-htpasswd';
-    } else if ($self->bundle() ne "DomCloud") {
+    } elsif ($self->bundle() ne "DomCloud") {
       # When defined make sure plugins we consider default are enabled
       my @plugins = split(/\s/, $virtual_server::config{'plugins'});
       push(@plugins, 'virtualmin-awstats', 'virtualmin-htpasswd');
