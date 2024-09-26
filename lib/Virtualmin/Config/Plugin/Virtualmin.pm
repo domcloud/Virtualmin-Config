@@ -44,20 +44,9 @@ sub actions {
     $virtual_server::config{'home_base'}            = "/home";
     $virtual_server::config{'webalizer'}            = 0;
 
-    # XXX If not run as part of bundle, it'll skip doing these mail-related configs, which is maybe sub-optimal
-    if (defined $self->bundle() &&
-        ($self->bundle() eq "MiniLEMP" ||
-         $self->bundle() eq "MiniLAMP"))
-    {
-      $virtual_server::config{'spam'}       = 0;
-      $virtual_server::config{'virus'}      = 0;
-      $virtual_server::config{'postgresql'} = 0;
-    }
-    elsif (defined $self->bundle()) {
-      $virtual_server::config{'spam'}       = 1;
-      $virtual_server::config{'virus'}      = 1;
-      $virtual_server::config{'postgresql'} = 1;
-    }
+    $virtual_server::config{'spam'}             = 0;
+    $virtual_server::config{'virus'}            = 0;
+    $virtual_server::config{'postgresql'}       = 1;  
     $virtual_server::config{'ftp'}              = 0;
     $virtual_server::config{'logrotate'}        = 3;
     $virtual_server::config{'default_procmail'} = 1;
@@ -68,7 +57,7 @@ sub actions {
     $virtual_server::config{'reseller_theme'}   = "authentic-theme";
     $virtual_server::config{'append_style'}     = 6;
 
-    if ($self->bundle() eq "LEMP" || $self->bundle() eq "MiniLEMP") {
+    if ($self->bundle() eq "DomCloud" || $self->bundle() eq "LEMP" || $self->bundle() eq "MiniLEMP") {
       $virtual_server::config{'ssl'}                = 0;
       $virtual_server::config{'web'}                = 0;
       $virtual_server::config{'backup_feature_ssl'} = 0;
@@ -76,15 +65,7 @@ sub actions {
     elsif (defined $self->bundle()) {
       $virtual_server::config{'ssl'} = 3;
     }
-    if (!defined($virtual_server::config{'plugins'})) {
-      # Enable extra default modules
-      $virtual_server::config{'plugins'} = 'virtualmin-awstats virtualmin-htpasswd';
-    } else {
-      # When defined make sure plugins we consider default are enabled
-      my @plugins = split(/\s/, $virtual_server::config{'plugins'});
-      push(@plugins, 'virtualmin-awstats', 'virtualmin-htpasswd');
-      $virtual_server::config{'plugins'} = join(' ', unique(@plugins));
-    }
+    $virtual_server::config{'plugins'} = '' # implicitly disable awstats and htpasswd
     if (-e "/etc/debian_version" || -e "/etc/lsb-release") {
       $virtual_server::config{'proftpd_config'}
         = 'ServerName ${DOM}	<Anonymous ${HOME}/ftp>	User ftp	Group nogroup	UserAlias anonymous ftp	<Limit WRITE>	DenyAll	</Limit>	RequireValidShell off	</Anonymous>';

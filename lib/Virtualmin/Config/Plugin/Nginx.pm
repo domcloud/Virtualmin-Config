@@ -45,31 +45,9 @@ sub actions {
     $vconfig{'avail_virtualmin-dav'} = '';
     $vconfig{'backup_feature_ssl'}   = 0;
 
-    if ($self->bundle() && $self->bundle() eq "MiniLEMP") {
-      $vconfig{'plugins'} = 'virtualmin-nginx virtualmin-nginx-ssl';
-    }
-    else {
-      $vconfig{'plugins'}
-        = 'virtualmin-awstats virtualmin-nginx virtualmin-nginx-ssl';
-    }
+    $vconfig{'plugins'} = 'virtualmin-nginx virtualmin-nginx-ssl';
+    
     save_module_config(\%vconfig, "virtual-server");
-
-    # Fix Nginx to start correctly after reboot
-    my $systemd_path = "/etc/systemd/system";
-    if (-d $systemd_path) {
-      write_file_contents($systemd_path . "/nginx.timer",
-        "[Unit]\n" .
-        "Description=Start Nginx after boot\n" .
-        "PartOf=nginx.service\n\n" .
-        "[Timer]\n" .
-        "OnActiveSec=10\n" .
-        "Unit=nginx.service\n\n" .
-        "[Install]\n" .
-        "WantedBy=multi-user.target\n");
-      $self->logsystem("systemctl daemon-reload");
-      $self->logsystem("systemctl enable nginx.timer");
-      $self->logsystem("systemctl restart nginx.timer");
-    }
 
     $self->done(1);    # OK!
   };
