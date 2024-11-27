@@ -38,6 +38,7 @@ sub actions {
   $self->spin();
   eval {
     foreign_require("virtual-server");
+    $virtual_server::config{'mail'}                 = 0;
     $virtual_server::config{'mail_system'}          = 0;
     $virtual_server::config{'nopostfix_extra_user'} = 1;
     $virtual_server::config{'aliascopy'}            = 1;
@@ -46,7 +47,7 @@ sub actions {
 
     $virtual_server::config{'spam'}             = 0;
     $virtual_server::config{'virus'}            = 0;
-    $virtual_server::config{'postgresql'}       = 1;  
+    $virtual_server::config{'postgres'}         = 1;  
     $virtual_server::config{'ftp'}              = 0;
     $virtual_server::config{'logrotate'}        = 3;
     $virtual_server::config{'default_procmail'} = 1;
