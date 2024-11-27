@@ -15,8 +15,8 @@ sub new {
 sub plugins {
   # DOM Cloud only use subset of features
   return [
-    "Webmin",   "Nginx",    "Bind",    "Postfix",    "MySQL",
-    "Firewall", "Quotas",    "Status", "Upgrade",   "Virtualmin",
+    "Webmin",   "Nginx",    "Bind",    "Postfix",    "MySQL",       "Shells",
+    "Firewall", "Quotas",    "Status", "Upgrade",   "SpamAssassin", "Virtualmin"
   ];
 }
 
