@@ -36,13 +36,7 @@ sub actions {
     $vconfig{'avail_virtualmin-dav'} = '';
     $vconfig{'backup_feature_ssl'}   = 0;
 
-    if ($self->bundle() && $self->bundle() eq "MiniLEMP") {
-      $vconfig{'plugins'} = 'virtualmin-nginx virtualmin-nginx-ssl';
-    }
-    else {
-      $vconfig{'plugins'}
-        = 'virtualmin-awstats virtualmin-nginx virtualmin-nginx-ssl';
-    }
+    $vconfig{'plugins'} = 'virtualmin-nginx virtualmin-nginx-ssl';
     save_module_config(\%vconfig, "virtual-server");
 
     # Fix Nginx to start correctly after reboot

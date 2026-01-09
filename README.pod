@@ -3,7 +3,9 @@
 
 =encoding utf8
 
-=head1 NAME
+=head1 FORK
+
+This is a fork of original [Virtualmin-Config](https://github.com/virtualmin/Virtualmin-Config) to be used specifically for [DOM Cloud](https://github.com/domcloud/container).
 
 Virtualmin::Config - A collection of plugins to initialize the configuration
 of services that Virtualmin manages, and a command line tool called

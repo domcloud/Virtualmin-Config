@@ -49,22 +49,13 @@ sub actions {
     $virtual_server::config{'reseller_theme'}       = "authentic-theme";
     $virtual_server::config{'append_style'}         = 6;
 
-    # For mini stack
-    if ($mini_stack) {
-      $virtual_server::config{'mail_system'} = 99;
-      $virtual_server::config{'spam'}        = 0;
-      $virtual_server::config{'virus'}       = 0;
-      $virtual_server::config{'dns'}         = 0;
-      $virtual_server::config{'mail'}        = 0;
-    }
-    elsif (defined $self->bundle()) {
-      $virtual_server::config{'spam'}       = 1;
-      $virtual_server::config{'virus'}      = 1;
-      $virtual_server::config{'default_procmail'} = 1,
-      $virtual_server::config{'spam_delivery'}    = "\$HOME/Maildir/.spam/"
-    }
+    $virtual_server::config{'spam'}             = 0;
+    $virtual_server::config{'virus'}            = 0;
+    $virtual_server::config{'postgresql'}       = 1;  
+    $virtual_server::config{'default_procmail'} = 1;
+    $virtual_server::config{'spam_delivery'}    = "\$HOME/Maildir/.spam/";
 
-    if (defined $self->bundle() && $self->bundle() =~ /LEMP/i) {
+    if (defined $self->bundle() && ($self->bundle() eq "DomCloud" || $self->bundle() =~ /LEMP/i)) {
       $virtual_server::config{'ssl'}                = 0;
       $virtual_server::config{'web'}                = 0;
       $virtual_server::config{'backup_feature_ssl'} = 0;
@@ -75,10 +66,6 @@ sub actions {
 
     # Enable extra default modules
     my @plugins = split /\s+/, ($virtual_server::config{'plugins'} || '');
-    push(@plugins, 'virtualmin-awstats', 'virtualmin-htpasswd');
-    if ($virtual_server::virtualmin_pro) {
-      push(@plugins, 'virtualmin-wp-workbench');
-    }
     $virtual_server::config{'plugins'} = join(' ', unique(@plugins));
     
     if ((!$mini_stack) &&
