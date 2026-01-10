@@ -56,6 +56,7 @@ sub actions {
     $virtual_server::config{'spam_delivery'}    = "\$HOME/Maildir/.spam/";
 
     if (defined $self->bundle() && ($self->bundle() eq "DomCloud" || $self->bundle() =~ /LEMP/i)) {
+      $virtual_server::config{'mail_system'}        = 99;
       $virtual_server::config{'ssl'}                = 0;
       $virtual_server::config{'web'}                = 0;
       $virtual_server::config{'backup_feature_ssl'} = 0;
