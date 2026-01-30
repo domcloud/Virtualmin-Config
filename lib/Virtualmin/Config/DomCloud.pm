@@ -17,7 +17,7 @@ sub plugins {
   return [
     "Webmin",   "Nginx",     "Bind",
     "MySQL",    "PostgreSQL", "Shells",
-    "Firewall", "Quotas",     "Virtualmin"
+    "Quotas",   "Virtualmin"
   ];
 }
 
