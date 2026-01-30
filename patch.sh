@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -f /etc/lsb-release ]; then 
+if [ -f /etc/debian_version ]; then 
   rsync -r ./lib/Virtualmin /usr/share/perl5
 elif [ -f /etc/redhat-release ]; then 
   rsync -r ./lib/Virtualmin /usr/share/perl5/vendor_perl
