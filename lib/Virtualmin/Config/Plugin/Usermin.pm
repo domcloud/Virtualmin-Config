@@ -46,6 +46,7 @@ sub actions {
     usermin::get_usermin_miniserv_config(\%uminiserv);
     $uminiserv{'preroot'}         = "authentic-theme";
     $uminiserv{'ssl'}             = "1";
+    $uminiserv{'syslog'}          = "1";
     $uminiserv{'ssl_cipher_list'} = $webmin::strong_ssl_ciphers;
     $uminiserv{'domainuser'}      = 1;
     $uminiserv{'domainstrip'}     = 1;
@@ -98,7 +99,7 @@ sub actions {
       $mailconfig{'from_map'}         = $map || "/etc/postfix/virtual";
       $mailconfig{'from_format'}      = 1;
       $mailconfig{'mail_system'}      = 4;
-      $mailconfig{'pop3_server'}      = 'localhost';
+      $mailconfig{'pop3_server'}      = '*';
       $mailconfig{'mail_qmail'}       = undef;
       $mailconfig{'mail_dir_qmail'}   = 'Maildir';
       $mailconfig{'server_attach'}    = 0;

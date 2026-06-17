@@ -1,3 +1,40 @@
+virtualmin-config (8.1.6) stable; urgency=medium
+
+  * Fix to clean files in custom temporary directory when using tmpfs filesystems
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Fri, 01 May 2026 22:00:00 +0200
+ 
+ virtualmin-config (8.1.5) stable; urgency=medium
+
+  * Fix to use the ProFTPd config directory for SSL certificates, since AppArmor blocks other locations in Ubuntu 26.04
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Thu, 30 Apr 2026 22:00:00 +0200
+ 
+virtualmin-config (8.1.4) stable; urgency=medium
+
+  * Fix to disable automatic external updates
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Tue, 17 Mar 2026 20:00:00 +0200
+ 
+virtualmin-config (8.1.3) stable; urgency=medium
+
+  * Add logic to update Webmin temporary directory when using tmpfs filesystems
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Sun, 01 Mar 2026 18:00:00 +0200
+
+virtualmin-config (8.1.2) stable; urgency=medium
+
+  * Add support for the Usermin jail in Fail2ban
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Mon, 16 Feb 2026 13:00:00 +0200
+
+virtualmin-config (8.1.1) stable; urgency=medium
+
+  * Fix Usermin mailbox authentication to work after login
+  * Fix permissions in OpenDKIM on EL 10 systems
+ 
+ -- Ilia Ross <ilia@virtualmin.com>  Mon, 02 Feb 2026 23:00:00 +0200
+
 virtualmin-config (8.1.0) stable; urgency=medium
 
   * Fix PostgreSQL configuration phase

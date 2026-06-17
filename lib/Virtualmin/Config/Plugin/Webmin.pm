@@ -44,6 +44,21 @@ sub actions {
     $gconfig{'theme'}        = "authentic-theme";
     $gconfig{'mobile_theme'} = "authentic-theme";
     $gconfig{'logfiles'}     = 1;
+    # Update Webmin tempdir if the filesystem is tmpfs
+    if (!$gconfig{'tempdir'} && defined &default_webmin_temp_dir) {
+      foreign_require("mount");
+      my $tmp = &default_webmin_temp_dir();
+      my (undef, undef, $disks, undef) = &mount::local_disk_space();
+      foreach my $disk (@$disks) {
+        if (&is_under_directory($disk->{'dir'}, $tmp)) {
+          if ($disk->{'type'} eq 'tmpfs' && -d '/var/tmp') {
+            $gconfig{'tempdir'} = '/var/tmp/.webmin';
+            $gconfig{'tempdirdelete'} = 1;
+            last;
+          }
+        }
+      }
+    }
     lock_file("$config_directory/config");
     write_file("$config_directory/config", \%gconfig);
     unlock_file("$config_directory/config");
@@ -68,6 +83,12 @@ sub actions {
       $mconfig{'from_virtualmin'} = 1;
       $mconfig{'spam_buttons'} = 'list,mail';
       save_module_config(\%mconfig, "mailboxes");
+    }
+    # Disable auto updates and make Webmin install security updates
+    foreign_require("init");
+    foreign_require("package-updates");
+    foreach (@package_updates::auto_update_services) {
+      &init::deactivate_action($_, 0) if defined &init::deactivate_action;
     }
     $self->done(1);    # OK!
   };
